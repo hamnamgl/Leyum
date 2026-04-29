@@ -1,2 +1,2 @@
-gradio
 ollama
+gradio
