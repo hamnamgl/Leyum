@@ -1,3 +1,24 @@
 .sixth/
 __pycache__/
+*.py[codz]
 *.pyc
+.env
+.venv
+env/
+venv/
+*.log
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Student data contents stay local, but keep the scaffold directories tracked.
+storage/sessions/*
+!storage/sessions/.gitkeep
+storage/misconceptions/*
+!storage/misconceptions/.gitkeep
+storage/schedules/*
+!storage/schedules/.gitkeep
+storage/progress/*
+!storage/progress/.gitkeep
+storage/reports/*
+!storage/reports/.gitkeep
