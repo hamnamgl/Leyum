@@ -1,1 +1,148 @@
-/* Child-friendly UI styles will live here. */
+/* LEYUM - Child Friendly Styles */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    background-color: #f0f4ff;
+    color: #222;
+}
+
+/* Main title */
+h1 {
+    font-size: 32px;
+    color: #2c7be5;
+    text-align: center;
+    margin-bottom: 4px;
+}
+
+h2 {
+    font-size: 22px;
+    color: #444;
+}
+
+/* Chat window */
+.chatbot {
+    font-size: 18px !important;
+    line-height: 1.8 !important;
+    border-radius: 16px !important;
+    background: white !important;
+}
+
+/* Input boxes */
+input[type="text"],
+textarea {
+    font-size: 18px !important;
+    padding: 12px !important;
+    border-radius: 10px !important;
+    border: 2px solid #2c7be5 !important;
+    width: 100% !important;
+}
+
+/* Primary button */
+.primary-btn,
+button.primary {
+    background-color: #2c7be5 !important;
+    color: white !important;
+    font-size: 20px !important;
+    padding: 14px 28px !important;
+    border-radius: 12px !important;
+    border: none !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    margin-top: 10px !important;
+}
+
+button.primary:hover {
+    background-color: #1a5fbb !important;
+}
+
+/* Secondary button */
+button.secondary {
+    background-color: #e8f4ff !important;
+    color: #2c7be5 !important;
+    font-size: 18px !important;
+    padding: 12px 24px !important;
+    border-radius: 12px !important;
+    border: 2px solid #2c7be5 !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    margin-top: 8px !important;
+}
+
+button.secondary:hover {
+    background-color: #d0e8ff !important;
+}
+
+/* Independence meter */
+.independence-bar {
+    height: 24px;
+    background: #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.independence-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2c7be5, #38d996);
+    border-radius: 12px;
+    transition: width 0.5s ease;
+}
+
+/* Review alert box */
+.review-alert {
+    background: #fff8e1;
+    border-left: 4px solid #f5a623;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/* Struggle warning */
+.struggle-warning {
+    background: #fff0f0;
+    border-left: 4px solid #e74c3c;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+/* Cards */
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Labels */
+label {
+    font-size: 16px !important;
+    font-weight: bold !important;
+    color: #444 !important;
+}
+
+/* Mobile friendly */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 24px;
+    }
+
+    body {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    button.primary,
+    button.secondary {
+        font-size: 16px !important;
+        padding: 12px !important;
+    }
+}
