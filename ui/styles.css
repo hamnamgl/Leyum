@@ -281,6 +281,31 @@ button.report-button {
     min-height: 110px;
 }
 
+.report-preview {
+    margin-top: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    border: 1px solid rgba(44, 123, 229, 0.14);
+    padding: 12px;
+}
+
+.report-preview-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #5b6f8c;
+    margin-bottom: 10px;
+}
+
+.report-frame {
+    width: 100%;
+    min-height: 320px;
+    border: none;
+    border-radius: 12px;
+    background: white;
+}
+
 label {
     font-size: 16px !important;
     font-weight: bold !important;

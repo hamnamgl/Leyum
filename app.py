@@ -1,3 +1,4 @@
+import html
 from pathlib import Path
 import time
 
@@ -172,15 +173,44 @@ def render_teacher_status(student_name, topic):
     )
 
 
-def render_report_box(message="Parent report will appear here after the session ends."):
-    return f"<div class='report-box'>{message}</div>"
+def render_report_box(message="Parent report will appear here after the session ends.", preview_html=""):
+    preview = ""
+    if preview_html:
+        escaped_html = html.escape(preview_html)
+        preview = (
+            "<div class='report-preview'>"
+            "<div class='report-preview-label'>Live Parent Report Preview</div>"
+            f"<iframe class='report-frame' srcdoc='{escaped_html}'></iframe>"
+            "</div>"
+        )
+    return f"<div class='report-box'>{message}</div>{preview}"
+
+
+def lock_teacher_inputs():
+    return (
+        gr.update(interactive=False),
+        gr.update(interactive=False),
+        gr.update(interactive=False),
+        gr.update(visible=False),
+        gr.update(visible=True),
+    )
+
+
+def unlock_teacher_inputs():
+    return (
+        gr.update(interactive=True),
+        gr.update(interactive=True),
+        gr.update(interactive=True),
+        gr.update(visible=True),
+        gr.update(visible=False),
+    )
 
 
 def configure_teacher(student_name, topic, correct_answer):
     global session_data
 
     if not student_name.strip():
-        empty_state = {"student_name": "", "topic": "", "correct_answer": ""}
+        empty_state = {"student_name": "", "topic": "", "correct_answer": "", "locked": False}
         return (
             empty_state,
             render_teacher_status("", ""),
@@ -189,10 +219,11 @@ def configure_teacher(student_name, topic, correct_answer):
             render_language_badge("Waiting"),
             render_report_box("Add the student name to begin."),
             [],
+            *unlock_teacher_inputs(),
         )
 
     if not topic.strip():
-        empty_state = {"student_name": "", "topic": "", "correct_answer": ""}
+        empty_state = {"student_name": "", "topic": "", "correct_answer": "", "locked": False}
         return (
             empty_state,
             render_teacher_status("", ""),
@@ -201,10 +232,11 @@ def configure_teacher(student_name, topic, correct_answer):
             render_language_badge("Waiting"),
             render_report_box("Add the topic to begin."),
             [],
+            *unlock_teacher_inputs(),
         )
 
     if not correct_answer.strip():
-        empty_state = {"student_name": "", "topic": "", "correct_answer": ""}
+        empty_state = {"student_name": "", "topic": "", "correct_answer": "", "locked": False}
         return (
             empty_state,
             render_teacher_status("", ""),
@@ -213,6 +245,7 @@ def configure_teacher(student_name, topic, correct_answer):
             render_language_badge("Waiting"),
             render_report_box("Add the correct answer in the teacher setup."),
             [],
+            *unlock_teacher_inputs(),
         )
 
     session_data = reset_session_data()
@@ -224,6 +257,7 @@ def configure_teacher(student_name, topic, correct_answer):
         "student_name": student_name,
         "topic": topic,
         "correct_answer": correct_answer,
+        "locked": True,
     }
 
     return (
@@ -234,6 +268,27 @@ def configure_teacher(student_name, topic, correct_answer):
         render_language_badge("Waiting"),
         render_report_box("Teacher setup saved. Student can answer now."),
         [],
+        *lock_teacher_inputs(),
+    )
+
+
+def unlock_teacher(teacher_state):
+    state = teacher_state or {}
+    if not state.get("student_name"):
+        empty_state = {"student_name": "", "topic": "", "correct_answer": "", "locked": False}
+        return (
+            empty_state,
+            render_teacher_status("", ""),
+            render_report_box("Nothing is locked yet. Add a teacher setup first."),
+            *unlock_teacher_inputs(),
+        )
+
+    state["locked"] = False
+    return (
+        state,
+        "<div class='teacher-status waiting'>Teacher setup unlocked. You can edit the saved answer or topic now.</div>",
+        render_report_box("Teacher setup unlocked. Save again after making changes."),
+        *unlock_teacher_inputs(),
     )
 
 
@@ -252,6 +307,18 @@ def handle_answer(student_answer, chat_history, teacher_state):
             render_review_alert(""),
             render_language_badge("Waiting"),
             render_report_box("Save the teacher setup first."),
+            "",
+        )
+
+    if not teacher_state.get("locked"):
+        return (
+            chat_history,
+            render_diagnosis_badge(),
+            render_struggle_box({"level": "Normal", "struggle_score": 0, "signals": []}),
+            render_independence_panel(teacher_state["student_name"]),
+            render_review_alert(teacher_state["student_name"]),
+            render_language_badge("Waiting"),
+            render_report_box("Teacher setup is unlocked. Save the teacher setup before checking an answer."),
             "",
         )
 
@@ -364,11 +431,15 @@ def end_session(teacher_state):
         },
     )
 
-    return render_report_box(f"Parent report generated successfully.<br><strong>{report_path}</strong>")
+    preview_html = Path(report_path).read_text(encoding="utf-8")
+    return render_report_box(
+        f"Parent report generated successfully.<br><strong>{report_path}</strong>",
+        preview_html=preview_html,
+    )
 
 
 with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
-    teacher_state = gr.State({"student_name": "", "topic": "", "correct_answer": ""})
+    teacher_state = gr.State({"student_name": "", "topic": "", "correct_answer": "", "locked": False})
 
     gr.Markdown("# LEYUM - Offline AI Tutor")
     gr.Markdown("*Understands why a student is wrong, not just that they are wrong.*")
@@ -390,6 +461,7 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
                     placeholder="Teacher enters the correct answer here",
                 )
                 teacher_save_btn = gr.Button("Save Teacher Setup", variant="primary")
+                teacher_unlock_btn = gr.Button("Unlock Teacher Setup", visible=False)
                 teacher_status = gr.HTML(render_teacher_status("", ""))
 
             with gr.Group(elem_classes=["student-card"]):
@@ -427,6 +499,26 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
             language_display,
             report_display,
             chatbox,
+            student_name_input,
+            topic_input,
+            correct_answer_input,
+            teacher_save_btn,
+            teacher_unlock_btn,
+        ],
+    )
+
+    teacher_unlock_btn.click(
+        fn=unlock_teacher,
+        inputs=[teacher_state],
+        outputs=[
+            teacher_state,
+            teacher_status,
+            report_display,
+            student_name_input,
+            topic_input,
+            correct_answer_input,
+            teacher_save_btn,
+            teacher_unlock_btn,
         ],
     )
 
