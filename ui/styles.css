@@ -1,23 +1,23 @@
-/* LEYUM - Refined Classroom UI */
+/* LEYUM - Modern Startup Demo UI */
 
 :root {
-    --bg-top: #f6f0e8;
-    --bg-bottom: #edf4ff;
-    --surface: rgba(255, 255, 255, 0.82);
-    --surface-strong: rgba(255, 255, 255, 0.94);
-    --surface-soft: #f7f9fc;
-    --ink: #20324d;
-    --ink-soft: #5e6e85;
-    --line: rgba(39, 69, 112, 0.12);
-    --blue: #2457c5;
-    --blue-deep: #17367f;
-    --teal: #159b8a;
-    --gold: #e4a01d;
-    --rose: #dd5c67;
-    --mint: #e9fbf2;
-    --shadow-lg: 0 26px 60px rgba(23, 42, 79, 0.14);
-    --shadow-md: 0 16px 36px rgba(23, 42, 79, 0.1);
-    --shadow-sm: 0 8px 18px rgba(23, 42, 79, 0.07);
+    --bg-top: #f4f7fc;
+    --bg-bottom: #e9f0fb;
+    --surface: rgba(255, 255, 255, 0.9);
+    --surface-strong: rgba(255, 255, 255, 0.98);
+    --surface-soft: #f6f9fe;
+    --ink: #142033;
+    --ink-soft: #66758c;
+    --line: rgba(20, 32, 51, 0.1);
+    --blue: #2251ff;
+    --blue-deep: #1639b8;
+    --teal: #09a58d;
+    --gold: #ffb020;
+    --rose: #ef5f7a;
+    --mint: #ebfff8;
+    --shadow-lg: 0 24px 64px rgba(20, 32, 51, 0.12);
+    --shadow-md: 0 16px 40px rgba(20, 32, 51, 0.09);
+    --shadow-sm: 0 10px 24px rgba(20, 32, 51, 0.07);
 }
 
 * {
@@ -31,34 +31,35 @@ body {
 
 body {
     margin: 0;
-    font-family: "Aptos", "Segoe UI", "Trebuchet MS", sans-serif;
+    font-family: "Segoe UI", "Aptos", "Helvetica Neue", sans-serif;
     font-size: 18px;
     color: var(--ink);
     background:
-        radial-gradient(circle at top left, rgba(228, 160, 29, 0.18), transparent 24%),
-        radial-gradient(circle at top right, rgba(36, 87, 197, 0.18), transparent 28%),
+        radial-gradient(circle at top left, rgba(34, 81, 255, 0.12), transparent 24%),
+        radial-gradient(circle at top right, rgba(9, 165, 141, 0.1), transparent 26%),
         linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
 }
 
 .gradio-container {
-    max-width: 1420px !important;
-    padding: 28px 22px 42px !important;
+    max-width: 1460px !important;
+    padding: 26px 24px 40px !important;
 }
 
 h1 {
     margin: 0;
     text-align: center;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 48px;
-    letter-spacing: 0.01em;
-    color: #17305f;
+    font-family: "Segoe UI", "Aptos", sans-serif;
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    color: #0f1728;
 }
 
 h2 {
     margin: 0 0 12px;
     font-size: 24px;
     font-weight: 800;
-    color: #1d2d4a;
+    color: #18263d;
 }
 
 p,
@@ -74,7 +75,7 @@ label,
     margin-bottom: 0;
     text-align: center;
     color: var(--ink-soft);
-    font-size: 18px;
+    font-size: 17px;
 }
 
 .teacher-card,
@@ -85,11 +86,11 @@ label,
     overflow: hidden;
     background: var(--surface);
     border: 1px solid rgba(255, 255, 255, 0.62);
-    border-radius: 28px;
-    padding: 22px;
-    margin-bottom: 18px;
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 20px;
     box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(18px);
+    backdrop-filter: blur(14px);
 }
 
 .teacher-card::before,
@@ -101,50 +102,46 @@ label,
     left: 0;
     right: 0;
     top: 0;
-    height: 6px;
+    height: 4px;
 }
 
 .teacher-card::before {
-    background: linear-gradient(90deg, #2457c5, #58a4ff);
+    background: linear-gradient(90deg, #2251ff, #56a1ff);
 }
 
 .student-card::before {
-    background: linear-gradient(90deg, #159b8a, #64d6b5);
+    background: linear-gradient(90deg, #09a58d, #49d4bf);
 }
 
 .dashboard-card::before {
-    background: linear-gradient(90deg, #17367f, #2457c5);
+    background: linear-gradient(90deg, #0f1728, #2251ff);
 }
 
 .report-card::before {
-    background: linear-gradient(90deg, #d89215, #f1c257);
+    background: linear-gradient(90deg, #ff9f1a, #ffc14d);
 }
 
 .teacher-card {
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(242, 248, 255, 0.92) 100%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(246, 250, 255, 0.94) 100%);
 }
 
 .student-card {
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 252, 247, 0.92) 100%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(243, 255, 252, 0.94) 100%);
 }
 
 .dashboard-card {
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(243, 247, 255, 0.92) 100%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(244, 248, 255, 0.95) 100%);
 }
 
 .report-card {
-    background:
-        linear-gradient(180deg, rgba(255, 252, 244, 0.98) 0%, rgba(255, 247, 223, 0.94) 100%);
+    background: linear-gradient(180deg, rgba(255, 253, 248, 0.99) 0%, rgba(255, 248, 230, 0.95) 100%);
 }
 
 .chatbot {
-    border-radius: 24px !important;
-    border: 1px solid rgba(36, 87, 197, 0.12) !important;
-    background: rgba(255, 255, 255, 0.92) !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), var(--shadow-sm) !important;
+    border-radius: 22px !important;
+    border: 1px solid rgba(20, 32, 51, 0.08) !important;
+    background: rgba(255, 255, 255, 0.97) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), var(--shadow-sm) !important;
     overflow: hidden !important;
 }
 
@@ -156,58 +153,58 @@ label,
 input[type="text"],
 textarea {
     width: 100% !important;
-    border-radius: 16px !important;
-    border: 1px solid rgba(36, 87, 197, 0.18) !important;
-    background: rgba(255, 255, 255, 0.95) !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(20, 32, 51, 0.1) !important;
+    background: rgba(255, 255, 255, 0.98) !important;
     padding: 14px 16px !important;
     font-size: 17px !important;
     color: var(--ink) !important;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 1px 2px rgba(20, 32, 51, 0.04) !important;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease !important;
 }
 
 input[type="text"]:focus,
 textarea:focus {
-    border-color: rgba(36, 87, 197, 0.58) !important;
-    box-shadow: 0 0 0 5px rgba(36, 87, 197, 0.12) !important;
+    border-color: rgba(34, 81, 255, 0.5) !important;
+    box-shadow: 0 0 0 5px rgba(34, 81, 255, 0.1) !important;
     transform: translateY(-1px);
 }
 
 label {
-    font-size: 14px !important;
+    font-size: 13px !important;
     font-weight: 800 !important;
-    letter-spacing: 0.05em !important;
+    letter-spacing: 0.08em !important;
     text-transform: uppercase !important;
-    color: #566784 !important;
+    color: #607089 !important;
 }
 
 .primary-btn,
 button.primary {
     width: 100% !important;
-    min-height: 58px !important;
+    min-height: 56px !important;
     border: none !important;
-    border-radius: 18px !important;
-    background: linear-gradient(135deg, #1d4fb6, #17367f) !important;
+    border-radius: 16px !important;
+    background: linear-gradient(135deg, #2251ff, #1639b8) !important;
     color: white !important;
-    font-size: 18px !important;
+    font-size: 17px !important;
     font-weight: 800 !important;
-    letter-spacing: 0.01em !important;
-    box-shadow: 0 18px 34px rgba(29, 79, 182, 0.26) !important;
+    letter-spacing: -0.01em !important;
+    box-shadow: 0 16px 30px rgba(34, 81, 255, 0.24) !important;
     transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease !important;
 }
 
 button.primary:hover {
     transform: translateY(-2px);
     filter: brightness(1.03);
-    box-shadow: 0 22px 38px rgba(29, 79, 182, 0.3) !important;
+    box-shadow: 0 20px 36px rgba(34, 81, 255, 0.28) !important;
 }
 
 .report-button button,
 button.report-button {
-    min-height: 74px !important;
-    font-size: 22px !important;
-    background: linear-gradient(135deg, #e4a01d, #c97d0e) !important;
-    box-shadow: 0 22px 38px rgba(201, 125, 14, 0.28) !important;
+    min-height: 72px !important;
+    font-size: 21px !important;
+    background: linear-gradient(135deg, #ffb020, #f28a00) !important;
+    box-shadow: 0 20px 36px rgba(242, 138, 0, 0.26) !important;
 }
 
 .status-pill {
@@ -215,10 +212,10 @@ button.report-button {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-height: 58px;
+    min-height: 54px;
     border-radius: 999px;
     padding: 12px 18px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
     border: 1px solid transparent;
     box-shadow: var(--shadow-md);
@@ -249,20 +246,20 @@ button.report-button {
 }
 
 .review-banner {
-    border-radius: 24px;
+    border-radius: 20px;
     padding: 20px 22px;
     margin: 14px 0 20px;
-    background: linear-gradient(135deg, #ebfff3, #f8fffb);
-    color: #166548;
-    border: 1px solid rgba(21, 155, 138, 0.16);
+    background: linear-gradient(135deg, #f2fbff, #fbfdff);
+    color: #114d8d;
+    border: 1px solid rgba(34, 81, 255, 0.12);
     box-shadow: var(--shadow-md);
 }
 
 .review-banner.urgent {
-    background: linear-gradient(135deg, #fff6dd, #fffdf4);
-    color: #835408;
-    border-color: rgba(228, 160, 29, 0.18);
-    box-shadow: 0 18px 40px rgba(228, 160, 29, 0.2);
+    background: linear-gradient(135deg, #fff6df, #fffdf8);
+    color: #8a5400;
+    border-color: rgba(255, 176, 32, 0.18);
+    box-shadow: 0 18px 40px rgba(255, 176, 32, 0.18);
 }
 
 .banner-kicker {
@@ -289,7 +286,7 @@ button.report-button {
 .diagnosis-card {
     margin-bottom: 14px;
     padding: 16px;
-    border-radius: 20px;
+    border-radius: 18px;
     background: var(--surface-strong);
     border: 1px solid var(--line);
 }
@@ -324,7 +321,7 @@ button.report-button {
 }
 
 .struggle-box {
-    border-radius: 20px;
+    border-radius: 18px;
     padding: 16px;
     margin-bottom: 14px;
     border: 1px solid transparent;
@@ -355,7 +352,7 @@ button.report-button {
 .angle-card {
     margin-bottom: 12px;
     padding: 14px 16px;
-    border-radius: 20px;
+    border-radius: 18px;
     background: linear-gradient(135deg, #eef3ff, #f9fbff);
     border: 1px solid rgba(36, 87, 197, 0.14);
 }
@@ -379,7 +376,7 @@ button.report-button {
 .processing-card {
     margin-bottom: 14px;
     padding: 14px 16px;
-    border-radius: 20px;
+    border-radius: 18px;
     border: 1px solid transparent;
 }
 
@@ -414,7 +411,7 @@ button.report-button {
 
 .analytics-card {
     padding: 16px 12px;
-    border-radius: 18px;
+    border-radius: 16px;
     text-align: center;
     background: linear-gradient(180deg, #ffffff 0%, #f5f8fe 100%);
     border: 1px solid var(--line);
@@ -422,7 +419,7 @@ button.report-button {
 }
 
 .analytics-value {
-    font-size: 30px;
+    font-size: 32px;
     font-weight: 800;
     color: #17367f;
 }
@@ -438,7 +435,7 @@ button.report-button {
 
 .independence-panel {
     background: linear-gradient(180deg, #f7fbff 0%, #eff5ff 100%);
-    border-radius: 22px;
+    border-radius: 20px;
     padding: 18px;
     border: 1px solid rgba(36, 87, 197, 0.1);
 }
@@ -465,7 +462,7 @@ button.report-button {
 .independence-fill {
     height: 100%;
     border-radius: 999px;
-    background: linear-gradient(90deg, #2457c5, #159b8a);
+    background: linear-gradient(90deg, #2251ff, #09a58d);
     box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.2);
     transition: width 0.45s ease;
 }
@@ -500,7 +497,7 @@ button.report-button {
     position: relative;
     z-index: 1;
     padding: 12px 6px;
-    border-radius: 18px;
+    border-radius: 16px;
     text-align: center;
     background: rgba(255, 255, 255, 0.86);
     color: #6b7a90;
@@ -509,7 +506,7 @@ button.report-button {
 }
 
 .week-chip.current {
-    background: linear-gradient(135deg, #2457c5, #159b8a);
+    background: linear-gradient(135deg, #2251ff, #09a58d);
     color: white;
     transform: translateY(-2px) scale(1.02);
 }
@@ -538,7 +535,7 @@ button.report-button {
 
 .role-banner,
 .report-hero {
-    border-radius: 18px;
+    border-radius: 16px;
     padding: 15px 16px;
     margin-bottom: 14px;
     line-height: 1.6;
@@ -566,7 +563,7 @@ button.report-button {
 
 .teacher-status,
 .report-box {
-    border-radius: 18px;
+    border-radius: 16px;
     padding: 15px 16px;
     font-size: 15px;
     line-height: 1.65;
@@ -591,7 +588,7 @@ button.report-button {
 .report-preview {
     margin-top: 16px;
     background: rgba(255, 255, 255, 0.92);
-    border-radius: 20px;
+    border-radius: 16px;
     border: 1px solid rgba(36, 87, 197, 0.12);
     padding: 14px;
     box-shadow: var(--shadow-sm);
@@ -610,7 +607,7 @@ button.report-button {
     width: 100%;
     min-height: 320px;
     border: none;
-    border-radius: 14px;
+    border-radius: 12px;
     background: white;
 }
 
@@ -620,7 +617,7 @@ button.report-button {
     }
 
     h1 {
-        font-size: 38px;
+        font-size: 42px;
     }
 
     .teacher-card,
@@ -628,7 +625,7 @@ button.report-button {
     .dashboard-card,
     .report-card {
         padding: 18px;
-        border-radius: 22px;
+        border-radius: 20px;
     }
 
     .week-timeline {
@@ -646,7 +643,7 @@ button.report-button {
     }
 
     h1 {
-        font-size: 31px;
+        font-size: 34px;
     }
 
     .status-pill {
