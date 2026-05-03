@@ -74,12 +74,14 @@ def render_review_alert(student_name):
     if due:
         return (
             "<div class='review-banner urgent'>"
+            "<div class='banner-kicker'>Daily Review Alert</div>"
             "<strong>Review Due Today</strong><br>"
             f"{', '.join(due)}"
             "</div>"
         )
     return (
         "<div class='review-banner'>"
+        "<div class='banner-kicker'>Daily Review Alert</div>"
         "<strong>No Reviews Due</strong><br>"
         "Everything is up to date for today."
         "</div>"
@@ -90,7 +92,7 @@ def render_language_badge(language="Waiting"):
     badge = language_flag(language)
     return (
         "<div class='status-pill language-pill'>"
-        f"<span class='pill-kicker'>Language</span> Responding in {language.title()} [{badge}]"
+        f"<span class='pill-kicker'>Language</span> Responding in {language.title()} {badge}"
         "</div>"
     )
 
@@ -98,7 +100,16 @@ def render_language_badge(language="Waiting"):
 def render_offline_badge():
     return (
         "<div class='status-pill offline-pill'>"
-        "<span class='pill-kicker'>Offline</span> No Internet Needed"
+        "<span class='pill-kicker'>Offline</span> No Internet"
+        "</div>"
+    )
+
+
+def render_role_banner(role, message, css_class):
+    return (
+        f"<div class='role-banner {css_class}'>"
+        f"<div class='banner-kicker'>{role}</div>"
+        f"{message}"
         "</div>"
     )
 
@@ -107,6 +118,7 @@ def render_diagnosis_badge(error_type=None):
     if error_type is None:
         return (
             "<div class='diagnosis-card'>"
+            "<div class='banner-kicker'>Error Type</div>"
             "<span class='diagnosis-label neutral'>Diagnosis pending</span>"
             "</div>"
         )
@@ -119,6 +131,7 @@ def render_diagnosis_badge(error_type=None):
     label, css_class = type_map.get(error_type, ("Unknown", "neutral"))
     return (
         "<div class='diagnosis-card'>"
+        "<div class='banner-kicker'>Error Type</div>"
         f"<span class='diagnosis-label {css_class}'>{label}</span>"
         "</div>"
     )
@@ -128,12 +141,14 @@ def render_struggle_box(struggle):
     if struggle["level"] == "Normal":
         return (
             "<div class='struggle-box calm'>"
+            "<div class='banner-kicker'>Struggle Detection</div>"
             "<strong>Struggle Watch:</strong> Normal"
             "</div>"
         )
     signal_list = "".join(f"<li>{signal}</li>" for signal in struggle["signals"])
     return (
         "<div class='struggle-box warning'>"
+        "<div class='banner-kicker'>Struggle Detection</div>"
         f"<strong>{struggle['level']}</strong>"
         f"<div class='struggle-score'>Score: {struggle['struggle_score']}/100</div>"
         f"<ul>{signal_list}</ul>"
@@ -208,12 +223,13 @@ def render_independence_panel(student_name):
     progress_width = max(8, int(score)) if score > 0 else 8
     return (
         "<div class='independence-panel'>"
+        "<div class='banner-kicker'>Scaffold Fade</div>"
         f"<div class='independence-header'>Week {week} <span>{score_label}</span></div>"
         "<div class='independence-track'>"
         f"<div class='independence-fill' style='width: {progress_width}%;'></div>"
         "</div>"
         f"<div class='independence-meta'>Independence: {score}%</div>"
-        "<div class='timeline-label'>Scaffold fade timeline</div>"
+        "<div class='timeline-label'>Week 1 to Week 6 visual fade</div>"
         f"{render_week_timeline(week)}"
         f"<div class='help-guidance'>{help_level}</div>"
         "</div>"
@@ -244,7 +260,14 @@ def render_report_box(message="Parent report will appear here after the session 
             f"<iframe class='report-frame' srcdoc='{escaped_html}'></iframe>"
             "</div>"
         )
-    return f"<div class='report-box'>{message}</div>{preview}"
+    return (
+        "<div class='report-hero'>"
+        "<div class='banner-kicker'>Parent Insight</div>"
+        "<strong>Parent Report</strong><br>"
+        "Summarize progress, struggle level, and next review steps in one place."
+        "</div>"
+        f"<div class='report-box'>{message}</div>{preview}"
+    )
 
 
 def lock_teacher_inputs():
@@ -556,16 +579,23 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
     gr.Markdown("# LEYUM - Offline AI Tutor")
     gr.Markdown("*Understands why a student is wrong, not just that they are wrong.*")
 
+    review_display = gr.HTML(render_review_alert(""))
+
     with gr.Row():
         offline_display = gr.HTML(render_offline_badge())
         language_display = gr.HTML(render_language_badge("Waiting"))
-
-    review_display = gr.HTML(render_review_alert(""))
 
     with gr.Row(equal_height=True):
         with gr.Column(scale=5):
             with gr.Group(elem_classes=["teacher-card"]):
                 gr.Markdown("## Teacher Setup")
+                gr.HTML(
+                    render_role_banner(
+                        "Teacher Only",
+                        "Teacher enters the topic and correct answer here. This stays separate from the student practice area.",
+                        "teacher",
+                    )
+                )
                 student_name_input = gr.Textbox(label="Student Name", placeholder="e.g. Fatima")
                 topic_input = gr.Textbox(label="Topic", placeholder="e.g. Decimals")
                 correct_answer_input = gr.Textbox(
@@ -578,6 +608,13 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
 
             with gr.Group(elem_classes=["student-card"]):
                 gr.Markdown("## Student Practice")
+                gr.HTML(
+                    render_role_banner(
+                        "Student Only",
+                        "Student only types their own answer below. The correct answer remains locked in teacher setup.",
+                        "student",
+                    )
+                )
                 diagnosis_display = gr.HTML(render_diagnosis_badge())
                 angle_display = gr.HTML(render_teaching_angle("analogy"))
                 struggle_display = gr.HTML(
@@ -601,9 +638,16 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
 
             with gr.Group(elem_classes=["report-card"]):
                 gr.Markdown("## Parent Report")
+                gr.HTML(
+                    render_role_banner(
+                        "Key Feature",
+                        "Generate a parent-facing summary with one prominent action at the end of the session.",
+                        "report",
+                    )
+                )
+                end_btn = gr.Button("Generate Parent Report", variant="primary", elem_classes=["report-button"])
                 report_display = gr.HTML(render_report_box())
                 report_file = gr.File(label="Download Parent Report", interactive=False)
-                end_btn = gr.Button("Generate Parent Report", variant="primary", elem_classes=["report-button"])
 
     teacher_save_btn.click(
         fn=configure_teacher,

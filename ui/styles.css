@@ -108,6 +108,10 @@ button.report-button {
 }
 
 .status-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     border-radius: 999px;
     padding: 12px 18px;
     font-size: 15px;
@@ -143,7 +147,7 @@ button.report-button {
     background: #ecfdf4;
     color: #0d7a4c;
     border-radius: 18px;
-    padding: 16px 18px;
+    padding: 18px 20px;
     margin: 12px 0 18px;
     border: 1px solid rgba(52, 178, 123, 0.2);
     box-shadow: var(--shadow);
@@ -153,10 +157,24 @@ button.report-button {
     background: #fff7da;
     color: #8b5d00;
     border-color: rgba(245, 166, 35, 0.25);
+    box-shadow: 0 16px 32px rgba(245, 166, 35, 0.18);
+}
+
+.banner-kicker {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.78;
 }
 
 .diagnosis-card {
     margin-bottom: 12px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+    border: 1px solid rgba(44, 123, 229, 0.12);
 }
 
 .diagnosis-label {
@@ -203,6 +221,7 @@ button.report-button {
     background: #fff1f1;
     color: #8d2e2e;
     border-left: 5px solid var(--red);
+    box-shadow: 0 14px 28px rgba(228, 91, 91, 0.14);
 }
 
 .struggle-box ul {
@@ -317,6 +336,7 @@ button.report-button {
     background: #dfe9f5;
     border-radius: 999px;
     overflow: hidden;
+    position: relative;
 }
 
 .independence-fill {
@@ -337,14 +357,30 @@ button.report-button {
     grid-template-columns: repeat(6, 1fr);
     gap: 8px;
     margin-top: 10px;
+    position: relative;
+}
+
+.week-timeline::before {
+    content: "";
+    position: absolute;
+    left: 3%;
+    right: 3%;
+    top: 50%;
+    height: 6px;
+    transform: translateY(-50%);
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(44, 123, 229, 0.9), rgba(44, 123, 229, 0.18));
 }
 
 .week-chip {
+    position: relative;
+    z-index: 1;
     padding: 10px 6px;
     border-radius: 14px;
     text-align: center;
     background: #edf2f8;
     color: #73849a;
+    border: 1px solid rgba(44, 123, 229, 0.08);
 }
 
 .week-chip.current {
@@ -375,6 +411,33 @@ button.report-button {
     font-size: 15px;
 }
 
+.role-banner,
+.report-hero {
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.role-banner.teacher {
+    background: linear-gradient(135deg, #eef6ff, #f8fbff);
+    color: #295989;
+    border: 1px solid rgba(44, 123, 229, 0.18);
+}
+
+.role-banner.student {
+    background: linear-gradient(135deg, #eefcf5, #f7fff9);
+    color: #176142;
+    border: 1px solid rgba(52, 178, 123, 0.18);
+}
+
+.role-banner.report,
+.report-hero {
+    background: linear-gradient(135deg, #fff6df, #fffdf3);
+    color: #855b10;
+    border: 1px solid rgba(245, 166, 35, 0.22);
+}
+
 .teacher-status,
 .report-box {
     border-radius: 16px;
@@ -397,6 +460,14 @@ button.report-button {
     background: rgba(255, 255, 255, 0.7);
     border: 1px solid rgba(245, 166, 35, 0.25);
     min-height: 110px;
+}
+
+.report-button button,
+button.report-button {
+    min-height: 72px !important;
+    font-size: 24px !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 18px 34px rgba(44, 123, 229, 0.28) !important;
 }
 
 .report-preview {
