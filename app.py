@@ -171,6 +171,21 @@ def render_processing_status(state="idle"):
     )
 
 
+def render_session_analytics():
+    total_questions = len(session_data["history"])
+    hard_topics = len(session_data["hard_topics"])
+    responses_seen = len(session_data["responses"])
+    due_reviews = len(get_due_reviews(session_data["student_name"])) if session_data["student_name"] else 0
+    return (
+        "<div class='analytics-grid'>"
+        f"<div class='analytics-card'><div class='analytics-value'>{total_questions}</div><div class='analytics-label'>Questions</div></div>"
+        f"<div class='analytics-card'><div class='analytics-value'>{hard_topics}</div><div class='analytics-label'>Hard Topics</div></div>"
+        f"<div class='analytics-card'><div class='analytics-value'>{responses_seen}</div><div class='analytics-label'>Responses Seen</div></div>"
+        f"<div class='analytics-card'><div class='analytics-value'>{due_reviews}</div><div class='analytics-label'>Reviews Due</div></div>"
+        "</div>"
+    )
+
+
 def render_week_timeline(current_week):
     chips = []
     for week in range(1, 7):
@@ -264,6 +279,8 @@ def configure_teacher(student_name, topic, correct_answer):
             render_independence_panel(""),
             render_language_badge("Waiting"),
             render_report_box("Add the student name to begin."),
+            None,
+            render_session_analytics(),
             [],
             render_teaching_angle("analogy"),
             render_processing_status("idle"),
@@ -279,6 +296,8 @@ def configure_teacher(student_name, topic, correct_answer):
             render_independence_panel(""),
             render_language_badge("Waiting"),
             render_report_box("Add the topic to begin."),
+            None,
+            render_session_analytics(),
             [],
             render_teaching_angle("analogy"),
             render_processing_status("idle"),
@@ -294,6 +313,8 @@ def configure_teacher(student_name, topic, correct_answer):
             render_independence_panel(""),
             render_language_badge("Waiting"),
             render_report_box("Add the correct answer in the teacher setup."),
+            None,
+            render_session_analytics(),
             [],
             render_teaching_angle("analogy"),
             render_processing_status("idle"),
@@ -319,6 +340,8 @@ def configure_teacher(student_name, topic, correct_answer):
         render_independence_panel(student_name),
         render_language_badge("Waiting"),
         render_report_box("Teacher setup saved. Student can answer now."),
+        None,
+        render_session_analytics(),
         [],
         render_teaching_angle("analogy"),
         render_processing_status("idle"),
@@ -361,6 +384,7 @@ def handle_answer(student_answer, chat_history, teacher_state):
             render_review_alert(""),
             render_language_badge("Waiting"),
             render_report_box("Save the teacher setup first."),
+            render_session_analytics(),
             render_teaching_angle("analogy"),
             render_processing_status("idle"),
             "",
@@ -375,6 +399,7 @@ def handle_answer(student_answer, chat_history, teacher_state):
             render_review_alert(teacher_state["student_name"]),
             render_language_badge("Waiting"),
             render_report_box("Teacher setup is unlocked. Save the teacher setup before checking an answer."),
+            render_session_analytics(),
             render_teaching_angle(session_data["teaching_style"]),
             render_processing_status("idle"),
             "",
@@ -389,6 +414,7 @@ def handle_answer(student_answer, chat_history, teacher_state):
             render_review_alert(teacher_state["student_name"]),
             render_language_badge("Waiting"),
             render_report_box("Student answer is required."),
+            render_session_analytics(),
             render_teaching_angle(session_data["teaching_style"]),
             render_processing_status("idle"),
             "",
@@ -465,6 +491,7 @@ def handle_answer(student_answer, chat_history, teacher_state):
         render_review_alert(student_name),
         render_language_badge(language),
         render_report_box("Session is active. End session any time to generate the parent report."),
+        render_session_analytics(),
         render_teaching_angle(angle),
         render_processing_status("done"),
         "",
@@ -484,6 +511,7 @@ def begin_processing(chat_history, teacher_state):
         render_review_alert(student_name),
         render_language_badge("Analyzing"),
         render_report_box("Working on the student's answer..."),
+        render_session_analytics(),
         render_teaching_angle(angle),
         render_processing_status("working"),
     )
@@ -512,9 +540,13 @@ def end_session(teacher_state):
     )
 
     preview_html = Path(report_path).read_text(encoding="utf-8")
-    return render_report_box(
-        f"Parent report generated successfully.<br><strong>{report_path}</strong>",
-        preview_html=preview_html,
+    return (
+        render_report_box(
+            f"Parent report generated successfully.<br><strong>{report_path}</strong>",
+            preview_html=preview_html,
+        ),
+        str(Path(report_path).resolve()),
+        render_session_analytics(),
     )
 
 
@@ -564,10 +596,13 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
             with gr.Group(elem_classes=["dashboard-card"]):
                 gr.Markdown("## Independence")
                 independence_display = gr.HTML(render_independence_panel(""))
+                gr.Markdown("## Session Analytics")
+                analytics_display = gr.HTML(render_session_analytics())
 
             with gr.Group(elem_classes=["report-card"]):
                 gr.Markdown("## Parent Report")
                 report_display = gr.HTML(render_report_box())
+                report_file = gr.File(label="Download Parent Report", interactive=False)
                 end_btn = gr.Button("Generate Parent Report", variant="primary", elem_classes=["report-button"])
 
     teacher_save_btn.click(
@@ -580,6 +615,8 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
             independence_display,
             language_display,
             report_display,
+            report_file,
+            analytics_display,
             chatbox,
             angle_display,
             processing_display,
@@ -617,6 +654,7 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
             review_display,
             language_display,
             report_display,
+            analytics_display,
             angle_display,
             processing_display,
         ],
@@ -632,6 +670,7 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
             review_display,
             language_display,
             report_display,
+            analytics_display,
             angle_display,
             processing_display,
             student_answer_input,
@@ -642,7 +681,7 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
     end_btn.click(
         fn=end_session,
         inputs=[teacher_state],
-        outputs=[report_display],
+        outputs=[report_display, report_file, analytics_display],
     )
 
 
