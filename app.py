@@ -141,6 +141,50 @@ def render_struggle_box(struggle):
     )
 
 
+def render_teaching_angle(angle="analogy"):
+    labels = {
+        "analogy": "Analogy Mode",
+        "step_by_step": "Step by Step",
+        "real_world_story": "Real World Story",
+        "counter_example": "Counter Example",
+    }
+    return (
+        "<div class='angle-card'>"
+        "<div class='angle-kicker'>Teaching Angle</div>"
+        f"<div class='angle-value'>{labels.get(angle, angle.replace('_', ' ').title())}</div>"
+        "</div>"
+    )
+
+
+def render_processing_status(state="idle"):
+    states = {
+        "idle": ("Tutor Ready", "Waiting for the next student answer.", "idle"),
+        "working": ("Processing Answer", "Detecting language, classifying error, and preparing feedback.", "working"),
+        "done": ("Response Ready", "Diagnosis and teaching response updated.", "done"),
+    }
+    title, detail, css_class = states.get(state, states["idle"])
+    return (
+        f"<div class='processing-card {css_class}'>"
+        f"<strong>{title}</strong>"
+        f"<div class='processing-detail'>{detail}</div>"
+        "</div>"
+    )
+
+
+def render_week_timeline(current_week):
+    chips = []
+    for week in range(1, 7):
+        level_map = {1: "80%", 2: "80%", 3: "50%", 4: "50%", 5: "30%", 6: "10%"}
+        state = "past" if week < current_week else "current" if week == current_week else "future"
+        chips.append(
+            "<div class='week-chip {state}'>"
+            f"<div class='week-number'>W{week}</div>"
+            f"<div class='week-help'>{level_map[week]} help</div>"
+            "</div>".format(state=state)
+        )
+    return "<div class='week-timeline'>" + "".join(chips) + "</div>"
+
+
 def render_independence_panel(student_name):
     score = get_score(student_name) if student_name else 0
     score_label = get_score_label(student_name) if student_name else "Not started yet"
@@ -154,6 +198,8 @@ def render_independence_panel(student_name):
         f"<div class='independence-fill' style='width: {progress_width}%;'></div>"
         "</div>"
         f"<div class='independence-meta'>Independence: {score}%</div>"
+        "<div class='timeline-label'>Scaffold fade timeline</div>"
+        f"{render_week_timeline(week)}"
         f"<div class='help-guidance'>{help_level}</div>"
         "</div>"
     )
@@ -219,6 +265,8 @@ def configure_teacher(student_name, topic, correct_answer):
             render_language_badge("Waiting"),
             render_report_box("Add the student name to begin."),
             [],
+            render_teaching_angle("analogy"),
+            render_processing_status("idle"),
             *unlock_teacher_inputs(),
         )
 
@@ -232,6 +280,8 @@ def configure_teacher(student_name, topic, correct_answer):
             render_language_badge("Waiting"),
             render_report_box("Add the topic to begin."),
             [],
+            render_teaching_angle("analogy"),
+            render_processing_status("idle"),
             *unlock_teacher_inputs(),
         )
 
@@ -245,6 +295,8 @@ def configure_teacher(student_name, topic, correct_answer):
             render_language_badge("Waiting"),
             render_report_box("Add the correct answer in the teacher setup."),
             [],
+            render_teaching_angle("analogy"),
+            render_processing_status("idle"),
             *unlock_teacher_inputs(),
         )
 
@@ -268,6 +320,8 @@ def configure_teacher(student_name, topic, correct_answer):
         render_language_badge("Waiting"),
         render_report_box("Teacher setup saved. Student can answer now."),
         [],
+        render_teaching_angle("analogy"),
+        render_processing_status("idle"),
         *lock_teacher_inputs(),
     )
 
@@ -307,6 +361,8 @@ def handle_answer(student_answer, chat_history, teacher_state):
             render_review_alert(""),
             render_language_badge("Waiting"),
             render_report_box("Save the teacher setup first."),
+            render_teaching_angle("analogy"),
+            render_processing_status("idle"),
             "",
         )
 
@@ -319,6 +375,8 @@ def handle_answer(student_answer, chat_history, teacher_state):
             render_review_alert(teacher_state["student_name"]),
             render_language_badge("Waiting"),
             render_report_box("Teacher setup is unlocked. Save the teacher setup before checking an answer."),
+            render_teaching_angle(session_data["teaching_style"]),
+            render_processing_status("idle"),
             "",
         )
 
@@ -331,6 +389,8 @@ def handle_answer(student_answer, chat_history, teacher_state):
             render_review_alert(teacher_state["student_name"]),
             render_language_badge("Waiting"),
             render_report_box("Student answer is required."),
+            render_teaching_angle(session_data["teaching_style"]),
+            render_processing_status("idle"),
             "",
         )
 
@@ -405,7 +465,27 @@ def handle_answer(student_answer, chat_history, teacher_state):
         render_review_alert(student_name),
         render_language_badge(language),
         render_report_box("Session is active. End session any time to generate the parent report."),
+        render_teaching_angle(angle),
+        render_processing_status("done"),
         "",
+    )
+
+
+def begin_processing(chat_history, teacher_state):
+    if chat_history is None:
+        chat_history = []
+    student_name = teacher_state.get("student_name", "") if teacher_state else ""
+    angle = session_data.get("teaching_style", "analogy")
+    return (
+        chat_history,
+        render_diagnosis_badge(),
+        render_struggle_box({"level": "Normal", "struggle_score": 0, "signals": []}),
+        render_independence_panel(student_name),
+        render_review_alert(student_name),
+        render_language_badge("Analyzing"),
+        render_report_box("Working on the student's answer..."),
+        render_teaching_angle(angle),
+        render_processing_status("working"),
     )
 
 
@@ -467,9 +547,11 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
             with gr.Group(elem_classes=["student-card"]):
                 gr.Markdown("## Student Practice")
                 diagnosis_display = gr.HTML(render_diagnosis_badge())
+                angle_display = gr.HTML(render_teaching_angle("analogy"))
                 struggle_display = gr.HTML(
                     render_struggle_box({"level": "Normal", "struggle_score": 0, "signals": []})
                 )
+                processing_display = gr.HTML(render_processing_status("idle"))
                 chatbox = gr.Chatbot(label="LEYUM Tutor", height=420)
                 student_answer_input = gr.Textbox(
                     label="Student Answer",
@@ -499,6 +581,8 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
             language_display,
             report_display,
             chatbox,
+            angle_display,
+            processing_display,
             student_name_input,
             topic_input,
             correct_answer_input,
@@ -523,6 +607,21 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
     )
 
     submit_btn.click(
+        fn=begin_processing,
+        inputs=[chatbox, teacher_state],
+        outputs=[
+            chatbox,
+            diagnosis_display,
+            struggle_display,
+            independence_display,
+            review_display,
+            language_display,
+            report_display,
+            angle_display,
+            processing_display,
+        ],
+        show_progress="full",
+    ).then(
         fn=handle_answer,
         inputs=[student_answer_input, chatbox, teacher_state],
         outputs=[
@@ -533,8 +632,11 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
             review_display,
             language_display,
             report_display,
+            angle_display,
+            processing_display,
             student_answer_input,
         ],
+        show_progress="full",
     )
 
     end_btn.click(

@@ -215,6 +215,59 @@ button.report-button {
     font-weight: 700;
 }
 
+.angle-card {
+    background: linear-gradient(135deg, #eef4ff, #f8fbff);
+    border: 1px solid rgba(44, 123, 229, 0.15);
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+}
+
+.angle-kicker,
+.timeline-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #657991;
+}
+
+.angle-value {
+    margin-top: 6px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--blue-deep);
+}
+
+.processing-card {
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    border: 1px solid transparent;
+}
+
+.processing-card.idle {
+    background: #f3f6fb;
+    color: #55657e;
+}
+
+.processing-card.working {
+    background: #eef6ff;
+    color: #1c5dc4;
+    border-color: rgba(44, 123, 229, 0.2);
+}
+
+.processing-card.done {
+    background: #eafaf0;
+    color: #0d7a4c;
+    border-color: rgba(52, 178, 123, 0.2);
+}
+
+.processing-detail {
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
 .independence-panel {
     background: linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
     border-radius: 18px;
@@ -248,6 +301,42 @@ button.report-button {
     margin-top: 10px;
     font-size: 15px;
     font-weight: 700;
+}
+
+.week-timeline {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.week-chip {
+    padding: 10px 6px;
+    border-radius: 14px;
+    text-align: center;
+    background: #edf2f8;
+    color: #73849a;
+}
+
+.week-chip.current {
+    background: linear-gradient(135deg, #2c7be5, #38d996);
+    color: white;
+    box-shadow: 0 10px 20px rgba(44, 123, 229, 0.2);
+}
+
+.week-chip.past {
+    background: #dfeaf7;
+    color: #33597f;
+}
+
+.week-number {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.week-help {
+    margin-top: 4px;
+    font-size: 11px;
 }
 
 .help-guidance {
