@@ -573,7 +573,7 @@ def end_session(teacher_state):
     )
 
 
-with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
+with gr.Blocks(title="LEYUM - Offline AI Tutor", css=CSS_TEXT) as app:
     teacher_state = gr.State({"student_name": "", "topic": "", "correct_answer": "", "locked": False})
 
     gr.Markdown("# LEYUM - Offline AI Tutor")
@@ -621,7 +621,12 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
                     render_struggle_box({"level": "Normal", "struggle_score": 0, "signals": []})
                 )
                 processing_display = gr.HTML(render_processing_status("idle"))
-                chatbox = gr.Chatbot(label="LEYUM Tutor", height=420)
+                chatbox = gr.Chatbot(
+                    label="LEYUM Tutor",
+                    height=420,
+                    type="messages",
+                    allow_tags=False,
+                )
                 student_answer_input = gr.Textbox(
                     label="Student Answer",
                     placeholder="Student types their answer here...",
@@ -730,4 +735,4 @@ with gr.Blocks(title="LEYUM - Offline AI Tutor") as app:
 
 
 if __name__ == "__main__":
-    app.launch(css=CSS_TEXT, ssl_verify=False)
+    app.launch()
